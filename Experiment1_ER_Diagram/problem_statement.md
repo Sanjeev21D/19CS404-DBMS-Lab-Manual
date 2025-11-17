@@ -1,6 +1,4 @@
-# ER Diagram Workshop – Submission Template
-## Name : SANJEEV D
-## Reg No : 212223040185
+# ER Diagram Workshop
 
 ## Objective
 To understand and apply ER modeling concepts by creating ER diagrams for real-world applications.
@@ -8,14 +6,14 @@ To understand and apply ER modeling concepts by creating ER diagrams for real-wo
 ## Purpose
 Gain hands-on experience in designing ER diagrams that represent database structure including entities, relationships, attributes, and constraints.
 
+---
 
 # Scenario A: City Fitness Club Management
 
-## Business Context: 
-
+**Business Context:**  
 FlexiFit Gym wants a database to manage its members, trainers, and fitness programs.
 
-## Requirements:
+**Requirements:**  
 - Members register with name, membership type, and start date.  
 - Each member can join multiple programs (Yoga, Zumba, Weight Training).  
 - Trainers assigned to programs; a program may have multiple trainers.  
@@ -24,61 +22,46 @@ FlexiFit Gym wants a database to manage its members, trainers, and fitness progr
 - Payments tracked for memberships and sessions.
 
 ### ER Diagram:
-
-
-<img width="1634" height="1253" alt="image" src="https://github.com/user-attachments/assets/b6774c52-8844-42fa-89c7-40bca0101534" />
+<img width="769" height="508" alt="image" src="https://github.com/user-attachments/assets/46e1f98e-3385-4776-ad15-041cc6195582" />
 
 
 ### Entities and Attributes
 
-
-| Entity | Attributes (PK, FK) | Notes |
-|--------|--------------------|-------|
-| Admin     |           User_Name (PK), Password	         |    Admin manages the website.|
-|  Gym Member	      |           Member_ID (PK), First_Name, Last_Name, User_Name, Password, Email_ID, Phone_Number, Age, Address (Street, City)	         |  A person who uses the system for gym-related activities.|
-|   Instructor	     |              Instructor_ID (PK), First_Name, Last_Name, User_Name, Password, Email_ID, Phone_Number, Age, Address (Street, City)	      |    Manages exercises, diet plans, and classes. |
-| Exercise	       |        Exercise_ID (PK), Exercise_Types	            |    Different types of workouts/exercises.   |
-|     Diet Plan	   |              DietPlan_ID (PK), Diet_Types	      |    Diet plans categorized by types.   |
-|   Classes	     |                Class_ID (PK), Cost, Date, Timing	    |     Gym classes that members can take.  |
-|     Gym Buddy Website	   |             (No explicit attributes shown)	       |    Acts as a platform entity between users (admin, member, instructor).   |
-
+| Entity    | Attributes (PK, FK) | Notes |
+|-----------|----------------------|-------|
+| Member    | member_id (PK), name, gender, dob, email, membership_type, start_date | Represents gym members who register for programs. |
+| Program   | program_id (PK), program_name, fee, duration, schedule | Represents the different fitness programs (e.g., Yoga, Zumba, Weight Training). |
+| Trainer   | trainer_id (PK), trainer_name, trainer_gender, trainer_phone, trainer_email, expertise | Stores trainer information (e.g., contact details, expertise). |
+| Session   | session_id (PK), date, time, trainer_id (FK), program_id (FK) | Represents individual time-bound classes. |
+| Payment   | payment_id (PK), amount, payment_type, payment_date, member_id (FK), program_id (FK) | Records payments made by members for specific programs. |
+| Attendance| attendance_id (PK), status, session_id (FK), member_id (FK) | Tracks attendance of members in specific sessions. |
 
 ### Relationships and Constraints
 
-
 | Relationship | Cardinality | Participation | Notes |
-|--------------|------------|---------------|-------|
-| Admin – Manage – Gym Buddy Website	      |     1 : 1	       |         Total (Admin must manage)	      |    Admin controls the website.   |
-|  Gym Member – Used – Gym Buddy Website	            |        M : 1	    |     Partial (members use site)	          |    Members interact with website.   |
-|       Instructor – Manage – Gym Buddy Website	       |      M : 1	      |          Partial	     |  Instructors also interact via website.     |
-|         Gym Member – View – Exercise	     |     M : M	       |          Partial	     |     Members can view many exercises, and exercises can be viewed by many members.  |
-|          Instructor – Manage – Exercise	    |    1 : M	        |     Total on Exercise	          |   Instructors create/manage exercises.    |
-|     Gym Member – View – Diet Plan	         |  M : M	          |      Partial         |   Members can view many diet plans.    |
-|      Instructor – Manage – Diet Plan	        |       1 : M	     |     Total on Diet Plan	          |    Instructors manage diet plans.   |
-|        Gym Member – Take Classes – Classes	      |       M : 1	     |           Partial	    |    A member can take many classes, each class can have many members.   |
-|         Instructor – Assign – Classes	     |       M : 1	     |        Total on Instructor	       |    Instructors are assigned to classes.   |
-
+|--------------|-------------|---------------|-------|
+| enrolls_in   | M:N | Member (Total), Program (Partial) | A member can enroll in multiple programs; a program can have many members. |
+| leads        | 1:M | Program (Total), Trainer (Partial) | Each program is led by one trainer, but a trainer may lead multiple programs. |
+| registers    | M:N | Both Partial | A member can register for many sessions, and each session can have many members. |
+| includes     | 1:M | Program (Total), Session (Total) | A program includes multiple sessions, but each session belongs to only one program. |
+| has          | 1:M | Member (Total), Payment (Total) | A member can make many payments; each payment belongs to one program. |
+| attends      | 1:M | Session (Total), Attendance (Total) | A session can have multiple attendance records. |
 
 ### Assumptions
+- A member must enroll in at least one program.
+- A program must be led by at least one trainer.
+- Payments are tied to members and programs (not to trainers directly).
+- Attendance is tracked at the session level.
 
 
-- Each Gym Member and Instructor has unique login credentials (User Name, Password).
-
-- A Diet Plan is always created/managed by an Instructor (not directly by a member).
-
-- Classes are scheduled by instructors and attended by members; each class must have at least one instructor assigned.
-
-- Exercises can exist independently, but usually managed by instructors.
-
-## The Gym Buddy Website is more of a conceptual entity representing the system, not a data table.
-
+---
 
 # Scenario B: City Library Event & Book Lending System
 
-## Business Context:  
+**Business Context:**  
 The Central Library wants to manage book lending and cultural events.
 
-## Requirements:  
+**Requirements:**  
 - Members borrow books, with loan and return dates tracked.  
 - Each book has title, author, and category.  
 - Library organizes events; members can register.  
@@ -87,46 +70,45 @@ The Central Library wants to manage book lending and cultural events.
 - Overdue fines apply for late returns.
 
 ### ER Diagram:
+<img width="725" height="517" alt="image" src="https://github.com/user-attachments/assets/4b613b28-4563-4e2e-894a-b7e211bdc0d6" />
 
-<img width="1182" height="915" alt="image" src="https://github.com/user-attachments/assets/408d3556-1971-4dff-ba06-5628921a9904" />
 
 ### Entities and Attributes
 
-
-| Entity | Attributes (PK, FK) | Notes |
-|--------|--------------------|-------|
-|  Books	      |           Book_ID (PK), Title, Author, Price, Available	         |   Represents library books.|
-|   Publisher	     |             Pub_ID (PK), Name, Address	       |     Publishers of books.  |
-|    Member	    |         Member_ID (PK), Name, Address, Member_Type, Member_Date, Expiry_Date	           |  Library members who borrow books.     |
-|    Borrowed_By (Associative Entity)	    |        Book_ID (FK), Member_ID (FK), Issue, Due_Date, Return_Date	            | Relationship entity to track which member borrowed which boo      |
-
+| Entity       | Attributes (PK, FK) | Notes |
+|--------------|----------------------|-------|
+| Member       | member_id (PK), name, gender, dob, email | Represents library members. |
+| Book         | book_id (PK), title, author, category | Represents books available for borrowing. |
+| Borrowing    | borrow_id (PK), loan_date, return_date, fine_amount, member_id (FK), book_id (FK) | Tracks loans and returns of books. |
+| Event        | event_id (PK), event_name, date, room_id (FK) | Cultural/library events. |
+| Speaker      | speaker_id (PK), name, expertise | Guest speakers/authors at events. |
+| Room         | room_id (PK), room_name, capacity, type | Rooms booked for events or study purposes. |
+| Registration | registration_id (PK), member_id (FK), event_id (FK) | Records member registrations for events. |
 
 ### Relationships and Constraints
 
-
-| Relationship | Cardinality | Participation | Notes |
-|--------------|------------|---------------|-------|
-| Published_By (Books–Publisher)	             |    M : 1	        |      Total on Books, Partial on Publisher	         | Each book must be published by exactly one publisher, a publisher can publish many books.      |
-|    Borrowed_By (Books–Member)	          |       M : M	     |      Partial on both sides	         |A member can borrow many books, and a book can be borrowed by many members over time (history tracked).       |
-
+| Relationship  | Cardinality | Participation | Notes |
+|---------------|-------------|---------------|-------|
+| borrows       | M:N | Member (Total), Book (Partial) | A member can borrow many books; books can be borrowed multiple times. |
+| registers_for | M:N | Both Partial | A member can register for many events; events can have many members. |
+| hosts         | M:N | Event (Total), Speaker (Partial) | An event can have many speakers; a speaker can host multiple events. |
+| booked_in     | 1:M | Room (Total), Event (Partial) | Each event takes place in one room; rooms can host many events. |
+| incurs        | 1:M | Borrowing (Total), Fine (Partial) | Late returns generate fines. |
 
 ### Assumptions
+- A book can only be borrowed by one member at a time.
+- Events must be assigned to one room.
+- Fines are calculated based on return_date vs. due_date.
+- Some events may not have speakers, but most do.
 
-- Each book has exactly one publisher.
-
-- A member can borrow multiple books at a time.
-
-- The Borrowed_By entity is used to store transaction details (issue date, due date, return date).
-
-- A book’s Available attribute indicates whether it can be borrowed.
-
+---
 
 # Scenario C: Restaurant Table Reservation & Ordering
 
-## Business Context: 
+**Business Context:**  
 A popular restaurant wants to manage reservations, orders, and billing.
 
-## Requirements:  
+**Requirements:**  
 - Customers can reserve tables or walk in.  
 - Each reservation includes date, time, and number of guests.  
 - Customers place food orders linked to reservations.  
@@ -135,50 +117,38 @@ A popular restaurant wants to manage reservations, orders, and billing.
 - Waiters assigned to serve reservations.
 
 ### ER Diagram:
-
-<img width="2581" height="1575" alt="image" src="https://github.com/user-attachments/assets/bc021b2e-6b67-484a-9b1b-2368b179d283" />
-
+<img width="702" height="522" alt="image" src="https://github.com/user-attachments/assets/4ccb442c-a484-4884-a8e6-7968893954c9" />
+# C: Restaurant Table Reservation & Ordering
 
 ### Entities and Attributes
 
-
-| Entity | Attributes (PK, FK) | Notes |
-|--------|--------------------|-------|
-| Admin	       |    admin_id (PK), admin_Fname, admin_Mname, admin_Lname, admin_pass	                |    Manages and checks rooms.   |
-| Receptionist	       |rec_id (PK), rec_Fname, rec_Mname, (other attributes)	                    |Confirms customer reservations and checks rooms.       |
-|Customer	        |cust_id (PK), cust_Fname, cust_Mname, cust_Lname, cust_address, cust_number	                    | Makes reservations and creates transactions.      |
-|   Room	     |   room_id (PK), (attributes like availability, capacity)	                 |Represents physical hotel rooms, linked to room types.       |
-| Room_type	       |room_code (PK), room_name	                    |Defines category/type of room (e.g., Deluxe, Standard).       |
-|Transaction	        |trans_id (PK), cust_id (FK), rec_id (FK), start_date, end_date, total_payment, payment_type (FK)	                    |Records booking/payment details for customers.   |
-|Payment_type	        |payment_type_id (PK), payment_name	                    |Stores different payment methods (cash, card, online).       |
-
+| Entity       | Attributes (PK, FK) | Notes |
+|--------------|----------------------|-------|
+| Customer     | customer_id (PK), name, phone, email | Represents restaurant customers. |
+| Reservation  | reservation_id (PK), date, time, number_of_guests, customer_id (FK), waiter_id (FK) | Table reservations. |
+| Waiter       | waiter_id (PK), waiter_name, waiter_phone | Waiters serving reservations. |
+| Order        | order_id (PK), order_date, order_time, reservation_id (FK) | Orders placed during a reservation. |
+| Dish         | dish_id (PK), dish_name, price, category_id (FK) | Food items in the menu. |
+| Category     | category_id (PK), category_name | Categories like starter, main, dessert. |
+| Bill         | bill_id (PK), total_amount, service_charge, reservation_id (FK) | Bill generated for a reservation. |
+| OrderDetails | order_id (FK), dish_id (FK), quantity | Junction table for the M:N relation between Order and Dish. |
 
 ### Relationships and Constraints
 
-
-
 | Relationship | Cardinality | Participation | Notes |
-|--------------|------------|---------------|-------|
-| Admin – Checks – Room	             | 1 : N	           |Total on Admin, Partial on Room	               |Admin checks multiple rooms. |
-|  Receptionist – Checks – Room	            |  1 : N	          |Total on Receptionist, Partial on Room	               | Receptionist verifies/checks room availability.      |
-|      Receptionist – Confirms – Customer	        |1 : N	            |Total on Receptionist, Partial on Customer	               | Receptionist confirms bookings for customers.      |
-| Customer – Creates – Transaction	             | 1 : N	           | Total on Customer, Partial on Transaction	              | A customer can create multiple transactions.      |
-|Room – has – Room_type	              |  N : 1	          | Total on Room, Partial on Room_type	              |Each room must belong to a room type.       |
-| Transaction – has – Payment_type	             |  N : 1	          | Total on Transaction, Partial on Payment_type	              |  Every transaction requires a payment type.     |
+|--------------|-------------|---------------|-------|
+| reserves     | 1:M | Customer (Total), Reservation (Partial) | A customer can make many reservations. |
+| serves       | 1:M | Waiter (Partial), Reservation (Total) | Each reservation is assigned to one waiter. |
+| places       | 1:M | Reservation (Total), Order (Partial) | A reservation can place many orders. |
+| contains     | M:N | Order (Total), Dish (Partial) | Orders can contain many dishes; dishes can appear in many orders. |
+| belongs_to   | 1:M | Category (Total), Dish (Total) | Each dish belongs to one category. |
+| billed       | 1:1 | Reservation (Total), Bill (Total) | Each reservation generates one bill. |
 
 ### Assumptions
-- Each Admin and Receptionist can check multiple rooms, but each room is checked by only one staff member at a time.
+- Every reservation must be linked to one customer and one waiter.
+- Each reservation generates exactly one bill.
+- Orders are tied to reservations (walk-ins are treated as reservations too).
+- Each dish belongs to exactly one category.
 
-- A Customer must exist before making a Transaction.
 
-- Transaction includes booking dates (start_date, end_date) and payment info.
-
-- Room_type determines room classification; attributes like price and capacity can be included here.
-
-## Instructions for Students
-
-1. Complete **all three scenarios** (A, B, C).  
-2. Identify entities, relationships, and attributes for each.  
-3. Draw ER diagrams using **draw.io / diagrams.net** or hand-drawn & scanned.  
-4. Fill in all tables and assumptions for each scenario.  
-5. Export the completed Markdown (with diagrams) as **a single PDF**
+---
